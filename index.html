@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAPE LUXE AUTO | Mother City Logistics & Mobile Tech</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #cfae6f; 
+            --dark: #0d0d0d;
+            --darker: #050505;
+            --light: #f8f8f8;
+            --grey: #161616;
+            --transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        html { scroll-behavior: smooth; }
+        body { background-color: var(--dark); color: var(--light); line-height: 1.6; }
+
+        /* --- STICKY NAV LOGIC --- */
+        .location-bar {
+            background: var(--primary);
+            color: var(--dark);
+            padding: 10px 5%;
+            text-align: center;
+            font-size: 0.7rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: var(--transition);
+            position: relative;
+            z-index: 1001;
+        }
+
+        nav {
+            padding: 1.5rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            z-index: 1000;
+            background: transparent;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            transition: var(--transition);
+            position: absolute;
+        }
+
+        nav.sticky {
+            position: fixed;
+            top: 0;
+            padding: 1rem 5%;
+            background: rgba(13, 13, 13, 0.98);
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid var(--primary);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .logo { font-size: 1.2rem; font-weight: 900; letter-spacing: 3px; text-transform: uppercase; }
+        .logo span { color: var(--primary); }
+
+        .nav-links a {
+            color: var(--light);
+            text-decoration: none;
+            margin-left: 2rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            transition: var(--transition);
+        }
+
+        .nav-links a:hover { color: var(--primary); }
+
+        /* --- Hero Section --- */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            padding: 0 8%;
+            background: linear-gradient(to right, rgba(0,0,0,0.85), rgba(0,0,0,0.3)), 
+                        url('https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&q=80&w=1920');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .hero-content { max-width: 800px; padding-top: 100px; }
+        .hero h1 { font-size: clamp(2.5rem, 7vw, 4.5rem); line-height: 1.1; margin-bottom: 1.5rem; text-transform: uppercase; }
+        .hero p { font-size: 1.2rem; color: #ccc; margin-bottom: 2rem; max-width: 600px; }
+        
+        .btn {
+            padding: 1.2rem 2.8rem;
+            background: var(--primary);
+            color: var(--dark);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-decoration: none;
+            display: inline-block;
+            transition: var(--transition);
+            border: none;
+            cursor: pointer;
+        }
+        .btn:hover { background: #fff; transform: translateY(-5px); }
+
+        /* --- Content Sections --- */
+        .section-padding { padding: 100px 8%; }
+        .section-title { font-size: 2.5rem; text-transform: uppercase; letter-spacing: 4px; margin-bottom: 3rem; text-align: center; }
+        .section-title span { color: var(--primary); }
+
+        /* Stats bar */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            background: var(--grey);
+            padding: 50px 5%;
+            text-align: center;
+            border-top: 1px solid #222;
+        }
+        .stat-box h2 { color: var(--primary); font-size: 2.5rem; margin-bottom: 5px; }
+        .stat-box p { font-size: 0.7rem; text-transform: uppercase; color: #666; letter-spacing: 2px; }
+
+        /* Cards */
+        .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; margin-top: 50px; }
+        .card { background: var(--grey); padding: 4rem 2.5rem; border: 1px solid #222; transition: var(--transition); position: relative; overflow: hidden; }
+        .card:hover { border-color: var(--primary); transform: translateY(-10px); }
+        .card i { font-size: 2.5rem; color: var(--primary); margin-bottom: 2rem; display: block; }
+        .card h3 { font-size: 1.3rem; margin-bottom: 1.5rem; text-transform: uppercase; }
+        .card p { color: #888; font-size: 0.95rem; }
+
+        /* Solutions Block */
+        .solutions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; margin-top: 60px; }
+        .sol-box { border-left: 2px solid var(--primary); padding-left: 30px; }
+        .sol-box h4 { font-size: 1.5rem; margin-bottom: 20px; text-transform: uppercase; color: var(--primary); }
+        .sol-box ul { list-style: none; }
+        .sol-box li { margin-bottom: 15px; color: #aaa; display: flex; align-items: flex-start; }
+        .sol-box li i { color: var(--primary); margin-right: 15px; margin-top: 5px; font-size: 0.8rem; }
+
+        /* Tech Specs Section */
+        .tech-specs { background: var(--darker); border: 1px solid #1a1a1a; padding: 50px; display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; margin-top: 80px; }
+        .tech-item h5 { color: var(--primary); text-transform: uppercase; font-size: 0.8rem; margin-bottom: 10px; }
+        .tech-item p { font-size: 0.85rem; color: #666; }
+
+        /* Booking */
+        .booking-section { background: #000; display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+        input, select, textarea {
+            width: 100%; padding: 1.2rem; background: #0a0a0a; border: 1px solid #333; color: white; margin-bottom: 1.5rem;
+        }
+        label { font-size: 0.7rem; text-transform: uppercase; color: var(--primary); font-weight: bold; letter-spacing: 1px; }
+
+        footer { padding: 60px 8%; border-top: 1px solid #222; text-align: center; }
+        .footer-logo { font-size: 1.5rem; font-weight: 900; margin-bottom: 20px; }
+        .footer-links { margin-bottom: 30px; }
+        .footer-links a { color: #666; text-decoration: none; margin: 0 15px; font-size: 0.8rem; }
+
+        @media (max-width: 900px) {
+            .solutions-grid, .booking-section, .stats-grid { grid-template-columns: 1fr; }
+            .nav-links { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="location-bar" id="topBar">
+        Elite Automotive Support across the Western Cape Peninsula
+    </div>
+
+    <nav id="mainNav">
+        <div class="logo">CAPE<span>LUXE</span></div>
+        <div class="nav-links">
+            <a href="#services">Services</a>
+            <a href="#solutions">Solutions</a>
+            <a href="#tech">Technology</a>
+            <a href="#booking">Book Now</a>
+            <a href="tel:+27211234567" style="color: var(--primary); border: 1px solid var(--primary); padding: 8px 20px;">+27 76 860 5661</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Engineered for the<br>Mother City.</h1>
+            <p>The definitive solution for premium vehicle logistics and mobile master-tech services. Serving Cape Town’s leading showrooms and private collectors.</p>
+            <a href="#booking" class="btn">Initialize Service</a>
+        </div>
+    </section>
+
+    <div class="stats-grid">
+        <div class="stat-box"><h2>45m</h2><p>Avg Dispatch Time</p></div>
+        <div class="stat-box"><h2>R10M</h2><p>Transit Insurance</p></div>
+        <div class="stat-box"><h2>15+</h2><p>Partner Garages</p></div>
+        <div class="stat-box"><h2>24/7</h2><p>Cape Coverage</p></div>
+    </div>
+
+    <section class="section-padding" id="services">
+        <h2 class="section-title">Core <span>Specializations</span></h2>
+        <div class="services-grid">
+            <div class="card">
+                <i class="fas fa-trailer"></i>
+                <h3>Precision Logistics</h3>
+                <p>Tailored delivery solutions for dealership sales, online purchases, and corporate fleet movements. GPS-tracked and fully insured.</p>
+            </div>
+            <div class="card">
+                <i class="fas fa-laptop-code"></i>
+                <h3>Mobile Diagnostics</h3>
+                <p>Advanced electronic troubleshooting and coding performed at your location using OEM-standard diagnostic hardware.</p>
+            </div>
+            <div class="card">
+                <i class="fas fa-oil-can"></i>
+                <h3>Elite Maintenance</h3>
+                <p>Full mechanical servicing, brake system overhauls, and preventative checks brought to your home or office park.</p>
+            </div>
+        </div>
+
+        <div class="tech-specs" id="tech">
+            <div class="tech-item">
+                <h5>Diagnostic Precision</h5>
+                <p>We utilize the latest Autel and Snap-on software compatible with all major European and Local brands.</p>
+            </div>
+            <div class="tech-item">
+                <h5>Asset Protection</h5>
+                <p>Every vehicle in our care is covered by comprehensive "Goods in Transit" insurance up to R10,000,000.</p>
+            </div>
+            <div class="tech-item">
+                <h5>Green Tech</h5>
+                <p>Eco-friendly mobile fluid recovery systems ensuring zero impact on your driveway or the environment.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-padding" style="background: #080808;" id="solutions">
+        <h2 class="section-title">Market <span>Solutions</span></h2>
+        <div class="solutions-grid">
+            <div class="sol-box">
+                <h4>Showrooms & Garages</h4>
+                <ul>
+                    <li><i class="fas fa-check"></i> Inter-branch stock rotation & fleet moves</li>
+                    <li><i class="fas fa-check"></i> Direct-to-customer professional handovers</li>
+                    <li><i class="fas fa-check"></i> Pre-Delivery Inspections (PDI) at your site</li>
+                    <li><i class="fas fa-check"></i> Emergency customer breakdown recovery</li>
+                </ul>
+            </div>
+            <div class="sol-box">
+                <h4>Collectors & Private</h4>
+                <ul>
+                    <li><i class="fas fa-check"></i> Doorstep annual servicing & maintenance</li>
+                    <li><i class="fas fa-check"></i> Pre-purchase "Safe-Buy" mobile inspections</li>
+                    <li><i class="fas fa-check"></i> High-value covered transport for show cars</li>
+                    <li><i class="fas fa-check"></i> Roadside electronic & mechanical assistance</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-padding booking-section" id="booking">
+        <div>
+            <h2 style="font-size: 3rem; text-transform: uppercase; margin-bottom: 2rem;">Secure a <br><span style="color:var(--primary)">Specialist</span></h2>
+            <p style="color: #666; margin-bottom: 2rem;">Our Cape Town dispatch hub is active. Provide your coordinates and vehicle details for immediate service allocation.</p>
+            
+            <div style="display: flex; gap: 20px; align-items: center; margin-top: 40px;">
+                <div style="width: 50px; height: 50px; border: 1px solid var(--primary); display: flex; align-items: center; justify-content: center;">
+                    <i class="fas fa-phone" style="color: var(--primary);"></i>
+                </div>
+                <div>
+                    <p style="font-size: 0.7rem; color: #666; text-transform: uppercase;">Direct Dispatch</p>
+                    <p style="font-size: 1.2rem; font-weight: bold;">+27 76 860 5661</p>
+                </div>
+            </div>
+        </div>
+
+        <div style="background: var(--grey); padding: 3.5rem; border: 1px solid #222;">
+            <form id="finalForm">
+                <label>Service Category</label>
+                <select id="serv">
+                    <option>Logistics / Car Delivery</option>
+                    <option>Mobile Mechanic (Emergency)</option>
+                    <option>Mobile Mechanic (Service)</option>
+                    <option>Pre-Purchase Inspection</option>
+                </select>
+
+                <label>Deployment Location</label>
+                <input type="text" placeholder="Suburb or GPS Coordinates" required>
+
+                <label>Vehicle Identification</label>
+                <input type="text" placeholder="Make, Model & Year" required>
+
+                <label>Special Requirements</label>
+                <textarea rows="3" placeholder="Symptoms, delivery timeframes, etc."></textarea>
+
+                <button type="submit" class="btn" style="width: 100%;">Confirm Deployment</button>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-logo">CAPE<span>LUXE</span></div>
+        <div class="footer-links">
+            <a href="#">Privacy</a>
+            <a href="#">Terms of Service</a>
+            <a href="#">Fleet Accounts</a>
+            <a href="#">Careers</a>
+        </div>
+        <p style="font-size: 0.6rem; color: #444; letter-spacing: 2px;">&copy; 2026 CAPE LUXE AUTO PRECISION • WESTERN CAPE HQ</p>
+    </footer>
+
+    <script>
+        // STICKY NAVBAR LOGIC
+        const nav = document.getElementById('mainNav');
+        const topBar = document.getElementById('topBar');
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                nav.classList.add('sticky');
+                topBar.style.marginTop = "-40px"; 
+                topBar.style.opacity = "0";
+            } else {
+                nav.classList.remove('sticky');
+                topBar.style.marginTop = "0";
+                topBar.style.opacity = "1";
+            }
+        });
+
+        // LIVE ACTIVITY FEED
+        const feed = [
+            "Logistics: BMW M4 moved to Camps Bay",
+            "Mechanic: Service completed in Durbanville",
+            "Logistics: 3-car dealer move in Century City",
+            "Inspection: Ferrari check in Constantia",
+            "Status: Dispatchers standing by"
+        ];
+
+        function startFeed() {
+            const el = document.createElement('div');
+            el.style = "position:fixed; bottom:20px; right:20px; background:rgba(0,0,0,0.9); border:1px solid #333; padding:10px 20px; font-size:0.6rem; color:var(--primary); text-transform:uppercase; z-index:2000; letter-spacing:1px;";
+            document.body.appendChild(el);
+            let i = 0;
+            setInterval(() => {
+                el.innerHTML = `<span style="color:#ff4444; animation: pulse 1s infinite;">●</span> LIVE: ${feed[i]}`;
+                i = (i + 1) % feed.length;
+            }, 5000);
+        }
+
+        document.getElementById('finalForm').addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert("Deployment Request Confirmed. A Cape Luxe coordinator will call you in < 10 mins.");
+        });
+
+        window.onload = startFeed;
+    </script>
+</body>
+</html>
